@@ -22,7 +22,7 @@ jobs:
         with:
           find: "__MY_SECRET_API_KEY__"
           replace: ${{ secrets.MY_API_KEY }}
-          include: "index.js"
+          include: "index.html"
 
       # 3. Deploy the modified files to the gh-pages branch
       - name: Deploy to GitHub Pages
