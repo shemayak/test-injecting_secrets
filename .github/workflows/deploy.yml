@@ -3,28 +3,33 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main # Change to "master" if your branch is named master
 
 permissions:
-  contents: write
+  contents: write # Allows pushing the replaced code to the pages branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
+      # 1. Pull down your code
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
-      # Fix: Target index.js (or whatever file actually holds the placeholder)
-      - name: Inject Secret into index.js
+      # 2. Find and Replace the placeholder in index.html (or index.js) with the GitHub Secret
+      - name: Inject Secret into index.html
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "__MY_SECRET_API_KEY__"
           replace: ${{ secrets.MY_API_KEY }}
-          include: "index.js"
+          include: "index.html" # Change to "index.js" if your file is index.js
 
+      # 3. Deploy the modified files to the gh-pages branch
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: .
+          folder: . # Deploys the current directory
           branch: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
