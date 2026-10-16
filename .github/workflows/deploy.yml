@@ -43,7 +43,7 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "__MY_SECRET_API_KEY__"
-          replace: ${{ secrets.MY_API_KEY }}
+          replace: ${{ secrets.TEST }}
           include: "dist/index.html"
 
       # 5. Upload the isolated folder as a safe, temporary artifact
