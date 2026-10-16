@@ -42,7 +42,7 @@ jobs:
       - name: Inject Secret into index.html
         uses: jacobtomlinson/gha-find-replace@v3
         with:
-          find: "__MY_SECRET_API_KEY__"
+          find: "__MY_SECRET__"
           replace: ${{ secrets.TEST }}
           include: "dist/index.html"
 
