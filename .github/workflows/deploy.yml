@@ -3,30 +3,38 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Change to "master" if your branch is named master
+      - main # Change to "master" if your branch is named master
 
 permissions:
-  contents: write # Allows pushing the replaced code to the pages branch
+  contents: write # Required to allow pushing to the gh-pages branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      # 1. Pull down your code
+      # 1. Pull down your source code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # 2. Find and Replace the placeholder in index.html with the GitHub Secret
+      # 2. Create an isolated distribution directory to avoid breaking source files
+      - name: Prepare Deployment Directory
+        run: |
+          mkdir dist
+          cp index.html dist/
+          # If you have CSS or JS files, copy them too: cp -r css js dist/ || true
+
+      # 3. Inject Secret ONLY inside the isolated deployment directory
       - name: Inject Secret into index.html
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           find: "__MY_SECRET_API_KEY__"
           replace: ${{ secrets.MY_API_KEY }}
-          include: "index.html"
+          include: "dist/index.html"
 
-      # 3. Deploy the modified files to the gh-pages branch
+      # 4. Deploy only the modified 'dist' folder to the gh-pages branch
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: . # Deploys the current directory
+          folder: dist # Deploys ONLY the safe, substituted folder
           branch: gh-pages
+          clean: true
