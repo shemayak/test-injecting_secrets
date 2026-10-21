@@ -1,7 +1,7 @@
         // The workflow will find the string below inside the dist/ folder and swap it
         // if(window.location.hostname == "shemayak.github.io"){
         //     globalThis.MY_SECRET_KEY = "__MY_SECRET__"; 
-        //     alert(MY_SECRET_KEY); 
+            alert("worked"); 
         // };
 
 
